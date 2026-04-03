@@ -1269,8 +1269,6 @@ void PropertyLoadBootDefaults() {
     property_initialize_ro_cpu_abilist();
     property_initialize_ro_vendor_api_level();
 
-<<<<<<< HEAD
-=======
     // Report a valid verified boot chain to make Google SafetyNet integrity
     // checks pass. This needs to be done before parsing the kernel cmdline as
     // these properties are read-only and will be set to invalid values with
@@ -1284,7 +1282,6 @@ void PropertyLoadBootDefaults() {
     // Restore the normal property override security after init extension is executed
     weaken_prop_override_security = false;
 
->>>>>>> f95babb62 (init: Fix and improve safetynet property spoofing)
     update_sys_usb_config();
 }
 
