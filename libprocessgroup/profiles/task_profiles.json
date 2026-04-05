@@ -572,6 +572,14 @@
             "Controller": "cpuset",
             "Path": "top-app"
           }
+        },
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
+            "Path": "top-app"
+          }
         }
       ]
     },
@@ -583,6 +591,14 @@
           "Params":
           {
             "Controller": "cpuset",
+            "Path": "top-app"
+          }
+        },
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
             "Path": "top-app"
           }
         }
