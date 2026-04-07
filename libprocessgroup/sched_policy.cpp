@@ -61,7 +61,7 @@ int set_cpuset_policy(pid_t tid, SchedPolicy policy) {
         case SP_FOREGROUND_WINDOW:
             return SetTaskProfiles(tid, {"CPUSET_SP_FOREGROUND_WINDOW"}, true) ? 0 : -1;
         case SP_SVP:
-            return SetTaskProfiles(tid, {"SvpPolicy"}, true) ? 0 : -1;
+            return SetTaskProfiles(tid, {"CPUSET_SP_SVP"}, true) ? 0 : -1;
         case SP_SYSTEMUI:
             return SetTaskProfiles(tid, {"CPUSET_SP_SYSTEMUI"}, true) ? 0 : -1;
         default:
@@ -263,7 +263,7 @@ const char* get_sched_policy_name(SchedPolicy policy) {
             [SP_BACKGROUND] = "bg", [SP_FOREGROUND] = "fg", [SP_SYSTEM] = "  ",
             [SP_AUDIO_APP] = "aa",  [SP_AUDIO_SYS] = "as",  [SP_TOP_APP] = "ta",
             [SP_RT_APP] = "rt",     [SP_RESTRICTED] = "rs", [SP_FOREGROUND_WINDOW] = "wi",
-            [SP_SVP] = "svp",       [SP_SYSTEMUI] = "su"
+            [SP_SYSTEMUI] = "su",   [SP_SVP] = "svp"
     };
     static_assert(arraysize(kSchedPolicyNames) == SP_CNT, "missing name");
     if (policy < SP_BACKGROUND || policy >= SP_CNT) {

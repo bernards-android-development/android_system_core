@@ -630,21 +630,6 @@
           }
         },
         {
-          "Name": "JoinCgroup",
-          "Params":
-          {
-            "Controller": "blkio",
-            "Path": ""
-          }
-        },
-        {
-          "Name": "SetTimerSlack",
-          "Params":
-          {
-            "Slack": "50000"
-          }
-        },
-        {
           "Name": "SetAttribute",
           "Params":
           {
@@ -910,16 +895,16 @@
       "Profiles": [ "RealTimeInputScheduling", "MaxPerformance", "ProcessCapacityMax", "TimerSlackNormal" ]
     },
     {
-      "Name": "CPUSET_SP_SVP",
-      "Profiles": [ "SvpPolicy" ]
-    },
-    {
       "Name": "SCHED_SP_SYSTEMUI",
       "Profiles": [ "CpuctlSystemUI", "SchedtuneSystemUI", "HighIoPriority", "TimerSlackNormal" ]
     },
     {
       "Name": "CPUSET_SP_SYSTEMUI",
       "Profiles": [ "CpuSetSystemUI", "MaxIoPriority", "TimerSlackNormal" ]
+    },
+    {
+      "Name": "CPUSET_SP_SVP",
+      "Profiles": [ "SvpPolicy", "MaxIoPriority", "TimerSlackNormal" ]
     }
   ]
 }
