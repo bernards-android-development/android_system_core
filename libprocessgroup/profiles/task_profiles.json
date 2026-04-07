@@ -16,6 +16,11 @@
       "File": "foreground_window/cpus"
     },
     {
+      "Name": "SvpCPUs",
+      "Controller": "cpuset",
+      "File": "svp/cpus"
+    },
+    {
       "Name": "MaxCapacityCPUs",
       "Controller": "cpuset",
       "File": "top-app/cpus"
@@ -606,6 +611,91 @@
     },
 
     {
+      "Name": "SvpPolicy",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "svp"
+          }
+        },
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
+            "Path": "svp"
+          }
+        },
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "blkio",
+            "Path": ""
+          }
+        },
+        {
+          "Name": "SetTimerSlack",
+          "Params":
+          {
+            "Slack": "50000"
+          }
+        },
+        {
+          "Name": "SetAttribute",
+          "Params":
+          {
+            "Name": "UClampMin",
+            "Value": "100",
+            "Optional": "true"
+          }
+        },
+        {
+          "Name": "SetAttribute",
+          "Params":
+          {
+            "Name": "UClampMax",
+            "Value": "100",
+            "Optional": "true"
+          }
+        },
+        {
+          "Name": "SetSchedulerPolicy",
+          "Params":
+          {
+            "Policy": "SCHED_RR",
+            "Priority": "1"
+          }
+        },
+        {
+          "Name": "SetAttribute",
+          "Params":
+          {
+            "Name": "UClampLatencySensitive",
+            "Value": "1",
+            "Optional": "true"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "SvpSched",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
+            "Path": "svp"
+          }
+        }
+      ]
+    },
+
+    {
       "Name": "LowMemoryUsage",
       "Actions": [
         {
@@ -772,6 +862,10 @@
       "Profiles": [ "RealtimePerformance", "MaxIoPriority", "TimerSlackNormal" ]
     },
     {
+      "Name": "SCHED_SP_SVP",
+      "Profiles": [ "SvpSched" ]
+    },
+    {
       "Name": "CPUSET_SP_DEFAULT",
       "Profiles": [ "TimerSlackNormal" ]
     },
@@ -814,6 +908,10 @@
     {
       "Name": "InputPolicy",
       "Profiles": [ "RealTimeInputScheduling", "MaxPerformance", "ProcessCapacityMax", "TimerSlackNormal" ]
+    },
+    {
+      "Name": "CPUSET_SP_SVP",
+      "Profiles": [ "SvpPolicy" ]
     },
     {
       "Name": "SCHED_SP_SYSTEMUI",

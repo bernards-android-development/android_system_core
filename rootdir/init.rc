@@ -156,6 +156,14 @@ on init
     chmod 0664 /dev/stune/systemui/tasks
     chmod 0664 /dev/stune/systemui/cgroup.procs
 
+    # svp stune groups
+    mkdir /dev/stune/svp
+    chown system system /dev/stune/svp
+    chown system system /dev/stune/svp/tasks
+    chown system system /dev/stune/svp/cgroup.procs
+    chmod 0664 /dev/stune/svp/tasks
+    chmod 0664 /dev/stune/svp/cgroup.procs
+
     # cpuctl hierarchy for devices using utilclamp
     mkdir /dev/cpuctl/foreground
     mkdir /dev/cpuctl/background
@@ -202,7 +210,7 @@ on init
     chmod 0664 /dev/cpuctl/system/tasks
     chmod 0664 /dev/cpuctl/system-background/tasks
     chmod 0664 /dev/cpuctl/dex2oat/tasks
-    chmod 0664 /dev/cpuctl/cgroup.procs
+    chmod 0755 /dev/cpuctl/cgroup.procs
     chmod 0664 /dev/cpuctl/foreground/cgroup.procs
     chmod 0664 /dev/cpuctl/foreground_window/cgroup.procs
     chmod 0664 /dev/cpuctl/background/cgroup.procs
@@ -211,23 +219,6 @@ on init
     chmod 0664 /dev/cpuctl/system/cgroup.procs
     chmod 0664 /dev/cpuctl/system-background/cgroup.procs
     chmod 0664 /dev/cpuctl/dex2oat/cgroup.procs
-
-    # systemui: dedicated scheduling for SystemUI
-    mkdir /dev/cpuctl/systemui
-    chown system system /dev/cpuctl/systemui
-    chown system system /dev/cpuctl/systemui/tasks
-    chown system system /dev/cpuctl/systemui/cgroup.procs
-    chown system system /dev/cpuctl/systemui/cpu.shares
-    chown system system /dev/cpuctl/systemui/cpu.uclamp.min
-    chown system system /dev/cpuctl/systemui/cpu.uclamp.max
-    chmod 0664 /dev/cpuctl/systemui/tasks
-    chmod 0664 /dev/cpuctl/systemui/cgroup.procs
-    chmod 0664 /dev/cpuctl/systemui/cpu.shares
-    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.min
-    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.max
-    write /dev/cpuctl/systemui/cpu.shares 1024
-    write /dev/cpuctl/systemui/cpu.uclamp.max 1024
-    write /dev/cpuctl/systemui/cpu.uclamp.min 100
 
     # Create a cpu group for NNAPI HAL processes
     mkdir /dev/cpuctl/nnapi-hal
@@ -247,6 +238,48 @@ on init
     chmod 0664 /dev/cpuctl/camera-daemon/tasks
     chmod 0664 /dev/cpuctl/camera-daemon/cgroup.procs
 
+    # systemui: dedicated scheduling for SystemUI
+    mkdir /dev/cpuctl/systemui
+    chown system system /dev/cpuctl/systemui
+    chown system system /dev/cpuctl/systemui/tasks
+    chown system system /dev/cpuctl/systemui/cgroup.procs
+    chown system system /dev/cpuctl/systemui/cpu.shares
+    chown system system /dev/cpuctl/systemui/cpu.uclamp.min
+    chown system system /dev/cpuctl/systemui/cpu.uclamp.max
+    chmod 0664 /dev/cpuctl/systemui/tasks
+    chmod 0664 /dev/cpuctl/systemui/cgroup.procs
+    chmod 0664 /dev/cpuctl/systemui/cpu.shares
+    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.min
+    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.max
+    write /dev/cpuctl/systemui/cpu.shares 1024
+    write /dev/cpuctl/systemui/cpu.uclamp.max 1024
+    write /dev/cpuctl/systemui/cpu.uclamp.min 100
+
+    # svp
+    mkdir /dev/cpuset/svp
+    copy /dev/cpuset/cpus /dev/cpuset/svp/cpus
+    copy /dev/cpuset/mems /dev/cpuset/svp/mems
+    chown system system /dev/cpuset/svp
+    chown system system /dev/cpuset/svp/tasks
+    chown system system /dev/cpuset/svp/cgroup.procs
+    chown system system /dev/cpuset/svp/cpus
+    chmod 0775 /dev/cpuset/svp
+    chmod 0775 /dev/cpuset/svp/cgroup.procs
+    chmod 0775 /dev/cpuset/svp/cpus
+    chmod 0775 /dev/cpuset/svp/tasks
+    mkdir /dev/cpuctl/svp
+    chown system system /dev/cpuctl/svp
+    chown system system /dev/cpuctl/svp/tasks
+    chown system system /dev/cpuctl/svp/cgroup.procs
+    chown system system /dev/cpuctl/svp/cpu.uclamp.latency_sensitive
+    chown system system /dev/cpuctl/svp/cpu.uclamp.max
+    chown system system /dev/cpuctl/svp/cpu.uclamp.min
+    chmod 0664 /dev/cpuctl/svp/tasks
+    chmod 0664 /dev/cpuctl/svp/cgroup.procs
+    chmod 0664 /dev/cpuctl/svp/cpu.uclamp.latency_sensitive
+    chmod 0664 /dev/cpuctl/svp/cpu.uclamp.max
+    chmod 0664 /dev/cpuctl/svp/cpu.uclamp.min
+
     # Create an stune group for camera-specific processes
     mkdir /dev/stune/camera-daemon
     chown system system /dev/stune/camera-daemon
@@ -254,6 +287,19 @@ on init
     chown system system /dev/stune/camera-daemon/cgroup.procs
     chmod 0664 /dev/stune/camera-daemon/tasks
     chmod 0664 /dev/stune/camera-daemon/cgroup.procs
+
+    # top-app permissions override
+    chown system system /dev/cpuctl/top-app
+    chown system system /dev/cpuctl/top-app/tasks
+    chown system system /dev/cpuctl/top-app/cgroup.procs
+    chown system system /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive
+    chown system system /dev/cpuctl/top-app/cpu.uclamp.max
+    chown system system /dev/cpuctl/top-app/cpu.uclamp.min
+    chmod 0775 /dev/cpuctl/top-app/tasks
+    chmod 0775 /dev/cpuctl/top-app/cgroup.procs
+    chmod 0775 /dev/cpuctl/top-app/cpu.uclamp.latency_sensitive
+    chmod 0775 /dev/cpuctl/top-app/cpu.uclamp.max
+    chmod 0775 /dev/cpuctl/top-app/cpu.uclamp.min
 
     # Create an stune group for NNAPI HAL processes
     mkdir /dev/stune/nnapi-hal
@@ -450,6 +496,28 @@ on init
 
     # set system-background to 0775 so SurfaceFlinger can touch it
     chmod 0775 /dev/cpuset/system-background
+    chmod 0775 /dev/cpuset/top-app
+    chmod 0775 /dev/cpuset/camera-daemon
+    chmod 0775 /dev/cpuset/foreground
+    chmod 0775 /dev/cpuset/restricted
+    chmod 0775 /dev/cpuset/background
+    chmod 0775 /dev/cpuset/foreground_window
+
+    # Boost framework
+    chmod 0775 /dev/cpuset/top-app/cpus
+    chmod 0775 /dev/cpuset/camera-daemon/cpus
+    chmod 0775 /dev/cpuset/foreground/cpus
+    chmod 0775 /dev/cpuset/foreground_window/cpus
+    chmod 0775 /dev/cpuset/restricted/cpus
+    chmod 0775 /dev/cpuset/system-background/cpus
+    chmod 0775 /dev/cpuset/background/cpus
+    chown system system /dev/cpuset/top-app/cpus
+    chown system system /dev/cpuset/camera-daemon/cpus
+    chown system system /dev/cpuset/foreground/cpus
+    chown system system /dev/cpuset/foreground_window/cpus
+    chown system system /dev/cpuset/restricted/cpus
+    chown system system /dev/cpuset/system-background/cpus
+    chown system system /dev/cpuset/background/cpus
 
     chmod 0664 /dev/cpuset/foreground/tasks
     chmod 0664 /dev/cpuset/foreground_window/tasks

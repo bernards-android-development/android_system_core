@@ -60,6 +60,8 @@ int set_cpuset_policy(pid_t tid, SchedPolicy policy) {
             return SetTaskProfiles(tid, {"CPUSET_SP_RESTRICTED"}, true) ? 0 : -1;
         case SP_FOREGROUND_WINDOW:
             return SetTaskProfiles(tid, {"CPUSET_SP_FOREGROUND_WINDOW"}, true) ? 0 : -1;
+        case SP_SVP:
+            return SetTaskProfiles(tid, {"SvpPolicy"}, true) ? 0 : -1;
         case SP_SYSTEMUI:
             return SetTaskProfiles(tid, {"CPUSET_SP_SYSTEMUI"}, true) ? 0 : -1;
         default:
@@ -117,6 +119,9 @@ int set_sched_policy(pid_t tid, SchedPolicy policy) {
         case SP_FOREGROUND_WINDOW:
             SLOGD("WI  tid %d (%s)", tid, thread_name);
             break;
+        case SP_SVP:
+            SLOGD("WI  tid %d (%s)", tid, thread_name);
+            break;
         case SP_SYSTEMUI:
             SLOGD("SU  tid %d (%s)", tid, thread_name);
             break;
@@ -141,6 +146,8 @@ int set_sched_policy(pid_t tid, SchedPolicy policy) {
             return SetTaskProfiles(tid, {"SCHED_SP_RT_APP"}, true) ? 0 : -1;
         case SP_FOREGROUND_WINDOW:
             return SetTaskProfiles(tid, {"SCHED_SP_FOREGROUND_WINDOW"}, true) ? 0 : -1;
+        case SP_SVP:
+            return SetTaskProfiles(tid, {"SCHED_SP_SVP"}, true) ? 0 : -1;
         case SP_SYSTEMUI:
             return SetTaskProfiles(tid, {"SCHED_SP_SYSTEMUI"}, true) ? 0 : -1;
         default:
@@ -195,6 +202,8 @@ static int get_sched_policy_from_group(const std::string& group, SchedPolicy* po
         *policy = SP_RESTRICTED;
     } else if (group == "foreground_window") {
         *policy = SP_FOREGROUND_WINDOW;
+    } else if (group == "svp") {
+        *policy = SP_SVP;
     } else if (group == "systemui") {
         *policy = SP_SYSTEMUI;
     } else {
@@ -254,7 +263,7 @@ const char* get_sched_policy_name(SchedPolicy policy) {
             [SP_BACKGROUND] = "bg", [SP_FOREGROUND] = "fg", [SP_SYSTEM] = "  ",
             [SP_AUDIO_APP] = "aa",  [SP_AUDIO_SYS] = "as",  [SP_TOP_APP] = "ta",
             [SP_RT_APP] = "rt",     [SP_RESTRICTED] = "rs", [SP_FOREGROUND_WINDOW] = "wi",
-            [SP_SYSTEMUI] = "su"
+            [SP_SVP] = "svp",       [SP_SYSTEMUI] = "su"
     };
     static_assert(arraysize(kSchedPolicyNames) == SP_CNT, "missing name");
     if (policy < SP_BACKGROUND || policy >= SP_CNT) {
@@ -277,7 +286,7 @@ const char* get_cpuset_policy_profile_name(SchedPolicy policy) {
             "CPUSET_SP_DEFAULT",      "CPUSET_SP_BACKGROUND", "CPUSET_SP_FOREGROUND",
             "CPUSET_SP_SYSTEM",       "CPUSET_SP_FOREGROUND", "CPUSET_SP_FOREGROUND",
             "CPUSET_SP_TOP_APP",      "CPUSET_SP_DEFAULT",    "CPUSET_SP_RESTRICTED",
-            "CPUSET_SP_FOREGROUND_WINDOW", "CPUSET_SP_SYSTEMUI"};
+            "CPUSET_SP_FOREGROUND_WINDOW", "CPUSET_SP_SYSTEMUI", "CPUSET_SP_SVP"};
     if (policy < SP_DEFAULT || policy >= SP_CNT) {
         return nullptr;
     }
