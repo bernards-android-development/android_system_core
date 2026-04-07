@@ -148,6 +148,14 @@ on init
     chmod 0664 /dev/stune/top-app/cgroup.procs
     chmod 0664 /dev/stune/rt/cgroup.procs
 
+    # systemui: dedicated scheduling for SystemUI
+    mkdir /dev/stune/systemui
+    chown system system /dev/stune/systemui
+    chown system system /dev/stune/systemui/tasks
+    chown system system /dev/stune/systemui/cgroup.procs
+    chmod 0664 /dev/stune/systemui/tasks
+    chmod 0664 /dev/stune/systemui/cgroup.procs
+
     # cpuctl hierarchy for devices using utilclamp
     mkdir /dev/cpuctl/foreground
     mkdir /dev/cpuctl/background
@@ -203,6 +211,23 @@ on init
     chmod 0664 /dev/cpuctl/system/cgroup.procs
     chmod 0664 /dev/cpuctl/system-background/cgroup.procs
     chmod 0664 /dev/cpuctl/dex2oat/cgroup.procs
+
+    # systemui: dedicated scheduling for SystemUI
+    mkdir /dev/cpuctl/systemui
+    chown system system /dev/cpuctl/systemui
+    chown system system /dev/cpuctl/systemui/tasks
+    chown system system /dev/cpuctl/systemui/cgroup.procs
+    chown system system /dev/cpuctl/systemui/cpu.shares
+    chown system system /dev/cpuctl/systemui/cpu.uclamp.min
+    chown system system /dev/cpuctl/systemui/cpu.uclamp.max
+    chmod 0664 /dev/cpuctl/systemui/tasks
+    chmod 0664 /dev/cpuctl/systemui/cgroup.procs
+    chmod 0664 /dev/cpuctl/systemui/cpu.shares
+    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.min
+    chmod 0664 /dev/cpuctl/systemui/cpu.uclamp.max
+    write /dev/cpuctl/systemui/cpu.shares 1024
+    write /dev/cpuctl/systemui/cpu.uclamp.max 1024
+    write /dev/cpuctl/systemui/cpu.uclamp.min 100
 
     # Create a cpu group for NNAPI HAL processes
     mkdir /dev/cpuctl/nnapi-hal
@@ -442,6 +467,19 @@ on init
     chmod 0664 /dev/cpuset/restricted/cgroup.procs
     chmod 0664 /dev/cpuset/cgroup.procs
     chmod 0664 /dev/cpuset/camera-daemon/cgroup.procs
+
+    # systemui: dedicated cpuset with all cores for SystemUI
+    mkdir /dev/cpuset/systemui
+    copy /dev/cpuset/cpus /dev/cpuset/systemui/cpus
+    copy /dev/cpuset/mems /dev/cpuset/systemui/mems
+    chown system system /dev/cpuset/systemui
+    chown system system /dev/cpuset/systemui/tasks
+    chown system system /dev/cpuset/systemui/cgroup.procs
+    chown system system /dev/cpuset/systemui/cpus
+    chmod 0775 /dev/cpuset/systemui
+    chmod 0775 /dev/cpuset/systemui/cgroup.procs
+    chmod 0775 /dev/cpuset/systemui/cpus
+    chmod 0775 /dev/cpuset/systemui/tasks
 
     # make the PSI monitor accessible to others
     chown system system /proc/pressure/memory

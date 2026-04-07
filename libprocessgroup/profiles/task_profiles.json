@@ -696,6 +696,45 @@
           }
         }
       ]
+    },
+    {
+      "Name": "CpuctlSystemUI",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpu",
+            "Path": "systemui"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "CpuSetSystemUI",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "cpuset",
+            "Path": "systemui"
+          }
+        }
+      ]
+    },
+    {
+      "Name": "SchedtuneSystemUI",
+      "Actions": [
+        {
+          "Name": "JoinCgroup",
+          "Params":
+          {
+            "Controller": "schedtune",
+            "Path": "systemui"
+          }
+        }
+      ]
     }
   ],
 
@@ -775,6 +814,14 @@
     {
       "Name": "InputPolicy",
       "Profiles": [ "RealTimeInputScheduling", "MaxPerformance", "ProcessCapacityMax", "TimerSlackNormal" ]
+    },
+    {
+      "Name": "SCHED_SP_SYSTEMUI",
+      "Profiles": [ "CpuctlSystemUI", "SchedtuneSystemUI", "HighIoPriority", "TimerSlackNormal" ]
+    },
+    {
+      "Name": "CPUSET_SP_SYSTEMUI",
+      "Profiles": [ "CpuSetSystemUI", "MaxIoPriority", "TimerSlackNormal" ]
     }
   ]
 }
